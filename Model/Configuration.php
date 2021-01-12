@@ -92,6 +92,11 @@ final class Configuration
      */
     private $xliffVersion;
 
+    /**
+     * @var array
+     */
+    private $defaultTranslationValue;
+
     public function __construct(array $data)
     {
         $this->name = $data['name'];
@@ -106,6 +111,7 @@ final class Configuration
         $this->blacklistDomains = $data['blacklist_domains'];
         $this->whitelistDomains = $data['whitelist_domains'];
         $this->xliffVersion = $data['xliff_version'];
+        $this->defaultTranslationValue = $data['default_translation_value'];
     }
 
     public function getName(): string
@@ -175,6 +181,11 @@ final class Configuration
     public function getXliffVersion(): string
     {
         return $this->xliffVersion;
+    }
+
+    public function getDefaultTranslationValue(): array
+    {
+        return $this->defaultTranslationValue;
     }
 
     /**

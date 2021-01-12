@@ -174,6 +174,18 @@ class Configuration implements ConfigurationInterface
                                 ->thenInvalid('"local_file_storage_options" must be an array.')
                             ->end()
                         ->end()
+
+                        ->arrayNode('default_translation_value')
+                        ->addDefaultChildrenIfNoneSet('all')
+                            ->useAttributeAsKey('locale')
+                            ->prototype('array')
+                                ->children()
+                                    ->enumNode('default_value')->values(['empty', 'key'])->defaultValue('empty')->end()
+                                    ->scalarNode('prefix')->defaultValue('')->end()
+                                ->end()
+                            ->end()
+                        ->end()
+
                     ->end()
                 ->end()
             ->end()

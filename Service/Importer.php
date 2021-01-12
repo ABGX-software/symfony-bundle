@@ -106,6 +106,9 @@ final class Importer
                         } elseif (null !== ($newTranslation = $meta->getDesc()) && $catalogue->getLocale() === $this->defaultLocale) {
                             $result->set($key, $newTranslation, $domain);
                         }
+                        if (!$newTranslation) {
+                            $result->set($key, $this->getDefaultTranslation($catalogue, $key), $domain);
+                        }
                     }
                 }
                 foreach ($merge->getObsoleteMessages($domain) as $key => $translation) {
@@ -118,6 +121,28 @@ final class Importer
         }
 
         return new ImportResult($results, $sourceCollection->getErrors());
+    }
+
+    private function getDefaultTranslation(MessageCatalogue $catalogue, string $key): string
+    {
+        $locale = $catalogue->getLocale();
+        if (isset($this->config['default_translation_value'][$locale])) {
+            $config_to_use = $this->config['default_translation_value'][$locale];
+        } else {
+            $config_to_use = $this->config['default_translation_value']['all'];
+        }
+        $prefix = $config_to_use['prefix'];
+
+        switch ($config_to_use['default_value']) {
+            case 'key':
+                $value = $key;
+                break;
+            default:
+                $value = '';
+                break;
+        }
+
+        return $prefix.$value;
     }
 
     private function convertSourceLocationsToMessages(MessageCatalogue $catalogue, SourceCollection $collection): void
